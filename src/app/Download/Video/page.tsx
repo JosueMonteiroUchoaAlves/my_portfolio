@@ -74,18 +74,16 @@ export default function Download() {
 				},
 			}
 		);
-		const responseData = await pageResponse.json();
-		// Decodifica a representação base64 para obter os bytes originais
-		const byteCharacters = atob(responseData.video);
+		const videoBase64 = await pageResponse.text();
+
+		const byteCharacters = atob(videoBase64);
 		const byteNumbers = new Array(byteCharacters.length);
 		for (let i = 0; i < byteCharacters.length; i++) {
 			byteNumbers[i] = byteCharacters.charCodeAt(i);
 		}
-		// Transforma em um video (Blob)
 		const byteArray = new Uint8Array(byteNumbers);
 		const blob = new Blob([byteArray], {type: "video/mp4"});
 
-		// Cria uma URL para o Blob
 		const url = URL.createObjectURL(blob);
 		setVideo(url);
 	}
