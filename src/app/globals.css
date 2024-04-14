@@ -25,3 +25,57 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+#cards:hover > .card::after {
+  opacity: 1;
+}
+
+.card {
+  @apply h-52 w-64 relative bg-white/15 m-2 rounded-lg
+}
+
+.card::before{
+  content: "";
+  background: radial-gradient(
+  800px circle at var(--mouse-x) var(--mouse-y),
+  rgba(255, 255, 255, 0.06),
+  transparent 40%
+  );
+  z-index: 3;
+}
+.card::after {  
+  background: radial-gradient(
+    600px circle at var(--mouse-x) var(--mouse-y), 
+    rgba(255, 255, 255, 0.4),
+    transparent 40%
+  );
+  z-index: 1;
+}
+.card > .card-content{
+  border-radius: inherit;
+  background-color: rgb(23,23,23);
+  height: calc(100% - 2px);
+  width: calc(100% - 2px);
+  inset: 1px;
+  position: relative;
+  z-index:2; 
+}
+
+.card:hover::before, .card:hover > .card-border{
+  opacity: 1;
+}
+
+.card::before,
+.card > .card-border{
+  @apply h-full absolute left-0 top-0 w-full opacity-0 transition-opacity duration-500
+}
+
+.card > .card-border{
+  content: "";
+  background: radial-gradient(
+  300px circle at var(--mouse-x) var(--mouse-y),
+  rgba(255, 255, 255, 0.3),
+  transparent 40%
+  );
+  z-index: 1;
+}
