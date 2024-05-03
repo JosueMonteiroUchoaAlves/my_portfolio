@@ -2,8 +2,10 @@
 import {useEffect, useRef} from "react";
 
 export default function Cards() {
-	const handleOnMouseMove = (e) => {
-		const cards = document.querySelectorAll(".cards");
+	const handleOnMouseMove = (e: MouseEvent) => {
+		const cards = document.querySelectorAll(
+			".cards"
+		) as NodeListOf<HTMLElement>;
 		cards.forEach((card) => {
 			const rect = card.getBoundingClientRect(),
 				x = e.clientX - rect.left,

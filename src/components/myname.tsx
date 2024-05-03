@@ -8,10 +8,10 @@ interface propiertis {
 export default function Myname(props: propiertis) {
 	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-	function changeText(event) {
+	function changeText(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
 		let interation = 0;
 		const interval = setInterval(() => {
-			event.target.innerText = event.target.innerText
+			event.currentTarget.innerText = event.currentTarget.innerText
 				.split("")
 				.map((letter: String, index: number) => {
 					if (index < interation) {
