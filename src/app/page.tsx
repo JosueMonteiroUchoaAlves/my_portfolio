@@ -5,7 +5,7 @@ import Cards from "@/components/cards";
 export default function Home() {
 	return (
 		<main className="flex min-h-screen flex-col items-center p-24">
-			<Myname word={"JOSUE UCHOA"} />
+			<h1 className="uri-text-logo">Welcome</h1>
 			<Cards></Cards>
 		</main>
 	);

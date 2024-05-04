@@ -2,10 +2,10 @@
 
 import {useEffect} from "react";
 
-interface propiertis {
+interface properties {
 	word: String;
 }
-export default function Myname(props: propiertis) {
+export default function Myname(props: properties) {
 	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	function changeText(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {

@@ -20,6 +20,9 @@ export default function Download() {
 				<a className="text-center block m-5 text-xl font-semibold bg-black p-4 rounded-xl hover:scale-105 ease-in-out transition-transform duration-600 hover:shadow-blue-700 hover:shadow-md">
 					Baixar audio de uma playlist
 				</a>
+				<a className="text-center block m-5 text-xl font-semibold bg-black p-4 rounded-xl hover:scale-105 ease-in-out transition-transform duration-600 hover:shadow-blue-700 hover:shadow-md">
+					Pesquisar na playlist
+				</a>
 			</div>
 		</main>
 	);

@@ -2,14 +2,49 @@
 
 import Image from "next/image";
 import {useEffect, useState} from "react";
-
 interface VideoMetadata {
 	thumbnail: string;
 	title: string;
 	length: number;
 }
 
+function wordToBase32(word: string) {
+	// Tabela de caracteres para base 32
+	const base32Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+
+	// Converter a palavra para uma matriz de bytes
+	const bytes = [];
+	for (let i = 0; i < word.length; i++) {
+		bytes.push(word.charCodeAt(i));
+	}
+
+	let binaryString = "";
+	for (let i = 0; i < bytes.length; i++) {
+		binaryString += bytes[i].toString(2).padStart(8, "0");
+	}
+
+	// Adicionar zeros extras para garantir que o comprimento do binário seja múltiplo de 5
+	const padding = 5 - (binaryString.length % 5);
+	binaryString += "0".repeat(padding % 5);
+
+	// Dividir o binário em grupos de 5 bits e convertê-los para base 32
+	let base32 = "";
+	for (let i = 0; i < binaryString.length; i += 5) {
+		const chunk = binaryString.substr(i, 5);
+		base32 += base32Chars[parseInt(chunk, 2)];
+	}
+
+	// Adicionar '=' para garantir que o comprimento da string seja múltiplo de 8
+	const remainder = base32.length % 8;
+	if (remainder !== 0) {
+		base32 += "=".repeat(8 - remainder);
+	}
+
+	return base32;
+}
+
 export default function Download() {
+	const [EncryptedLink, setEncryptedLink] = useState("");
 	const [link, setLink] = useState("");
 	const [videoMetadata, setVideoMetadata] = useState<VideoMetadata>({
 		thumbnail: "",
@@ -27,53 +62,24 @@ export default function Download() {
 		}
 	}, [video]);
 
-	function getInfoVideo(url: string) {
-		const regex =
-			/(?:youtube\.com\/.*[?&]v=|youtu\.be\/)([^"&?\/\s]{11}).*?[?&]ab_channel=([^"&?\/\s]+)/;
-		const match = url.match(regex);
-
-		if (match) {
-			const videoId = match[1];
-			const canal = match[2];
-
-			return [videoId, canal];
-		} else {
-			return ["", ""];
-		}
-	}
 	async function getVideoMetadata(videoLink: string) {
-		const infoVideo = getInfoVideo(videoLink);
-		if (infoVideo[0] === "" || infoVideo[1] === "") {
-			alert(
-				infoVideo[1] === ""
-					? "O Link precisa conter o nome do canal, procure copiar o link completo. Erro ao buscar informações do vídeo, verifique se o link digitado está correto ou recarregue a página."
-					: "Erro ao buscar informações do vídeo, verifique se o link digitado está correto ou recarregue a página."
-			);
-			return;
-		}
-		const pageResponse = await fetch(
-			`/api/getVideoInfo/${infoVideo[0]}/${infoVideo[1]}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
-		);
+		setEncryptedLink(wordToBase32(link));
+		const pageResponse = await fetch(`/api/getVideoInfo/${EncryptedLink}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
 		const metadata = await pageResponse.json();
 		setVideoMetadata(metadata);
 	}
 	async function getVideo(videoLink: string) {
-		const infoVideo = getInfoVideo(videoLink);
-		const pageResponse = await fetch(
-			`/api/downloadVideo/${infoVideo[0]}/${infoVideo[1]}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
-		);
+		const pageResponse = await fetch(`/api/downloadVideo/${EncryptedLink}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
 		const videoBase64 = await pageResponse.text();
 
 		const byteCharacters = atob(videoBase64);
@@ -123,22 +129,38 @@ export default function Download() {
 								width={288}
 								height={162}
 							/>
-							<div className="flex-col ml-5 w-6/12">
-								<h2 className="text-xl font-semibold ">
-									{videoMetadata.title}
-								</h2>
-								<p>
-									{Math.floor(videoMetadata.length / 60)}:
-									{(videoMetadata.length % 60).toString().padStart(2, "0")}
-								</p>
-								<button
-									className="mt-5 bottom-2 p-2 bg-neutral-800/20 rounded-lg"
-									onClick={() => {
-										getVideo(link);
-									}}
-								>
-									Baixar
-								</button>
+							<div className="text-center">
+								<div className="flex-col w-full ml-5">
+									<h2 className="text-xl font-semibold ">
+										{videoMetadata.title}
+									</h2>
+									<p className="text-right mr-4 mt-1 ">
+										{Math.floor(videoMetadata.length / 60)}:
+										{(videoMetadata.length % 60).toString().padStart(2, "0")}
+									</p>
+									<button
+										className="mt-5 bottom-2 p-2 bg-neutral-800 rounded-lg flex"
+										onClick={() => {
+											getVideo(link);
+										}}
+									>
+										Baixar
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											strokeWidth={1.5}
+											stroke="currentColor"
+											className="w-6 h-6 ml-2"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+											/>
+										</svg>
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -31,7 +33,7 @@ body {
 }
 
 .card {
-  @apply h-52 w-64 relative bg-white/15 m-2 rounded-lg
+  @apply h-52 w-64 relative bg-white/20 m-2 rounded-lg
 }
 
 .card::before{
@@ -67,7 +69,7 @@ body {
 
 .card::before,
 .card > .card-border{
-  @apply h-full absolute left-0 top-0 w-full opacity-0 transition-opacity duration-500
+  @apply h-full absolute left-0 top-0 w-full opacity-0 transition-opacity duration-500 rounded-lg
 }
 
 .card > .card-border{
@@ -78,4 +80,76 @@ body {
   transparent 40%
   );
   z-index: 1;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: local("Gilroy"),
+    url("https://resources.beecrowd.com/judge/fonts/Gilroy.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.uri-text-logo {
+  background: linear-gradient(
+    90deg,
+    #222,
+    #444,
+    #eee,
+    #222,
+    #444
+  );
+  background-size: 1000% 500%;
+  cursor: default;
+  display: inline-block;
+  font-size: 12vw;
+  font-family: "Gilroy";
+  float: right;
+  margin: 13px 12px;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-animation: uri 8s ease infinite;
+  -moz-animation: uri 8s ease infinite;
+  animation: uri 8s ease infinite;
+}
+
+@-webkit-keyframes uri {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-moz-keyframes uri {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes uri {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.githubLink {
+  font-family: "Gilroy";
+
+  @apply text-white  absolute top-2 right-4 text-xl
 }
