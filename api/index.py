@@ -41,6 +41,12 @@ async def downloadVideo(VideoLink:str):
                 yield encryptor.b64encode(chunk)
   return StreamingResponse(stream_video())
 
+@app.get("/api/getPlaylistName/{PlaylistLink}", status_code = 200)
+async def getPlaylistName(PlaylistLink:str):
+  decoded = str(encryptor.b32decode(PlaylistLink).decode('utf-8'))
+  playlist = Playlist(decoded)
+  return {"title":playlist.title}
+
 @app.get("/api/getPlaylistInfo/{PlaylistLink}", status_code = 200)
 async def getPlaylistInfo(PlaylistLink:str):
   #print("Request received", file=sys.stderr)
@@ -51,7 +57,7 @@ async def getPlaylistInfo(PlaylistLink:str):
   #print(f"Is list Empty? {not video_urls}", file=sys.stderr)
     
   async def stream_Playlist():
-    for index, video_url in enumerate(video_urls):
+    for video_url in video_urls:
       info_video = await getVideoInfo(video_url, fromAPI=False)
       #print(f"video info {index} appended", file=sys.stderr)
       yield dumps(info_video).encode('utf-8') + b"\n"
