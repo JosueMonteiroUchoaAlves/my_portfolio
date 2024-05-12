@@ -5,7 +5,6 @@ from fastapi.responses import StreamingResponse
 from io import BytesIO
 import base64 as encryptor
 from json import dumps
-import sys
 from unidecode import unidecode
 
 
