@@ -40,8 +40,8 @@ async def downloadVideo(VideoLink:str):
                 yield encryptor.b64encode(chunk)
   return StreamingResponse(stream_video())
 
-@app.get("/api/getPlaylistName/{PlaylistLink}", status_code = 200)
-async def getPlaylistName(PlaylistLink:str):
+@app.get("/api/getPlaylistTitle/{PlaylistLink}", status_code = 200)
+async def getPlaylistTitle(PlaylistLink:str):
   decoded = str(encryptor.b32decode(PlaylistLink).decode('utf-8'))
   playlist = Playlist(decoded)
   return {"title":playlist.title}

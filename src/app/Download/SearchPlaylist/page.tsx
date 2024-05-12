@@ -69,7 +69,7 @@ export default function Download() {
 	async function getPlaylistMetadata() {
 		setLoading(true);
 		const apiResponseForPlaylistTitle = await fetch(
-			`/api/getplaylistTitle/${EncryptedLink}`,
+			`/api/getPlaylistTitle/${EncryptedLink}`,
 			{
 				method: "GET",
 				headers: {
